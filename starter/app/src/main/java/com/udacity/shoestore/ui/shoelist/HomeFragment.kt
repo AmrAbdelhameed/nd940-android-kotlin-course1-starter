@@ -1,15 +1,13 @@
 package com.udacity.shoestore.ui.shoelist
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentHomeBinding
 import com.udacity.shoestore.models.Shoe
@@ -39,6 +37,7 @@ class HomeFragment : Fragment() {
         binding.add.setOnClickListener {
             navController.navigate(HomeFragmentDirections.actionHomeFragmentToAddShoeFragment())
         }
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -53,5 +52,20 @@ class HomeFragment : Fragment() {
         child.shoe_size.text = "${getString(R.string.shoe_size)}: ${shoe.size}"
         child.shoe_company.text = "${getString(R.string.shoe_company)}: ${shoe.company}"
         child.shoe_description.text = "${getString(R.string.shoe_description)}: ${shoe.description}"
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.logout)
+            navController.navigate(HomeFragmentDirections.actionLogout())
+
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            navController
+        ) || super.onOptionsItemSelected(item)
     }
 }
